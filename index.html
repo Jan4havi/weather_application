@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Material Design for Bootstrap</title>
+  <!-- MDB icon -->
+  <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+  <!-- MDB -->
+  <link rel="stylesheet" href="css/mdb.min.css" />
+</head>
+
+<body>
+  <!-- Start your project here-->
+
+  <div class="container my-5">
+    <div class="row d-flex justify-content-center text-white">
+      <div class="col-lg-6 col-md-8 col-sm-10">
+        <div id="wrapper-bg" class="card bg-image shadow-3-strong">
+          <div class="card-header text-center border-0">
+            <p class="h2 mb-1" id="wrapper-name"></p>
+            <p class="mb-1" id="wrapper-description"></p>
+            <p class="display-1 mb-1" id="wrapper-temp"></p>
+            <span>Pressure: <span id="wrapper-pressure"></span></span>
+            <div class="mx-2"></div>
+            <span>Humidity: <span id="wrapper-humidity"></span></span>
+          </div>
+          <div class="card-body shadow-3-strong border-top border-bottom text-center">
+            <div class="row d-flex justify-content-center">
+              <div class="col-2">
+                <strong class="d-block mb-2">wind</strong>
+                <iconify-icon icon="carbon:wind-stream" style="font-size:25px", style="color: white;"></iconify-icon> 
+                <strong class="d-block" id="wrapper wind"></strong>
+              </div>
+              <div class="col-2">
+                <strong id ="visible" class="d-block mb-2">visibility</strong>
+                <iconify-icon icon="material-symbols:visibility" style="font-size:25px",style="color: white;"></iconify-icon>
+                <strong class="d-block" id="wrapper visibility"></strong>
+              </div>
+              <div class="col-2">
+                <strong id="timezone"class="d-block mb-2">timezone</strong>
+                <iconify-icon icon="file-icons:moment-timezone" style="font-size:25px",style="color: white;"></iconify-icon>
+                <strong class="d-block" id="wrapper timezone"></strong>
+              </div>
+              <div class="col-2">
+                <strong id="sunrise" class="d-block mb-2">sunrise</strong>
+                <iconify-icon icon="ep:sunrise" style="font-size:25px",style="color: white;"></iconify-icon>
+                <strong class="d-block" id="wrapper sunrise"></strong>
+              </div>
+              <div class="col-2">
+                <strong id="sunset" class="d-block mb-2">sunset</strong>
+                <iconify-icon icon="carbon:sunset" style="font-size:25px",style="color: white;"></iconify-icon>
+                <strong class="d-block" id="wrapper sunset"></strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- MDB -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+  <!-- Custom scripts -->
+  <script type="text/javascript">
+  let queryUrl="https://api.openweathermap.org/data/2.5/weather?";
+  let city="q=india&";
+  let unit="&unit=metrics";
+  let parts="exclude=minutely,alerts&";
+  let id="appid=7541f1ca9c3abe8b507608e3e7b7c8b0";
+
+  let file=queryUrl+city+unit+parts+id
+
+  fetch(file)
+  .then((response)=>response.json())
+  .then((data)=>{
+     //main data
+    let main=data.weather[0].main;
+    let description=data.weather[0].description;
+    let temp=Math.round(data.main.temp);
+    let pressure=data.main.pressure;
+    let humidity=data.main.humidity;
+    let name="India Today";
+
+    document.getElementById("wrapper-description").innerHTML=description;
+    document.getElementById("wrapper-temp").innerHTML=temp+" F";
+    document.getElementById("wrapper-pressure").innerHTML=pressure;
+    document.getElementById("wrapper-humidity").innerHTML=humidity;
+    document.getElementById("wrapper-name").innerHTML=name;
+    console.log(temp);
+
+    // secondary data
+
+    let speed=data.wind.speed;
+    let visibiliter=data.visibility;
+    let timezoner=data.timezone;
+    let sunriser=data.sys.sunrise;
+    let sunsetter=data.sys.sunset;
+
+    document.getElementById("wrapper wind").innerHTML=speed+" m/h";
+    document.getElementById("wrapper visibility").innerHTML=visibiliter+" mi";
+    document.getElementById("wrapper timezone").innerHTML=timezoner+" UTC";
+    document.getElementById("wrapper sunrise").innerHTML=sunriser;
+    document.getElementById("wrapper sunset").innerHTML=sunsetter;
+    
+    //background set
+    switch(main){
+      case "snow":
+        document.getElementById("wrapper-bg").style.backgroundImage="url('img/weather-animations/snow.gif')";
+        break;
+      case "Clouds":
+        document.getElementById("wrapper-bg").style.backgroundImage="url('img/weather-animations/clouds.gif')";
+        break;
+      case "Fog":
+        document.getElementById("wrapper-bg").style.backgroundImage="url('img/weather-animations/fog.gif')";
+        break;
+      case "Rain":
+        document.getElementById("wrapper-bg").style.backgroundImage="url('img/weather-animations/rain.gif')";
+        break;
+      case "Clear":
+        document.getElementById("wrapper-bg").style.backgroundImage="url('img/weather-animations/thunderstorm.gif')";
+        break;
+      case "Thunderstorm":
+        document.getElementById("wrapper-bg").style.backgroundImage="url('img/weather-animations/clear.gif')";
+        break;
+    }
+  });
+  </script>
+  
+</body>
+
+</html>
